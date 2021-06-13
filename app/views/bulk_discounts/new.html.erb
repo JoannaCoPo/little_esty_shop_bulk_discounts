@@ -1,0 +1,14 @@
+<h3>Create a new bulk discount for your customers:</h3>
+<p><i>All fields are required to submit this form.</i></p>
+
+<section id="form">
+<%= form_with model: @bulk_discount, url: merchant_bulk_discounts_path(@merchant), method: :post, local: true do |f| %>
+  <p><%= f.label :discount %>
+  <%= f.text_field :discount %></p>
+
+  <p><%= f.label :min_quantity %>
+  <%= f.number_field :min_quantity, max: 100, min: 1 %></p>
+
+  <p><%= f.submit :submit %></p>
+<% end %>
+</section>
