@@ -3,7 +3,7 @@ require 'json'
 
 class PublicHolidayService
   attr_reader :upcoming_3_holidays
-
+#why is attr_reader not working? see view
   def initialize
     @upcoming_3_holidays = next_three
   end
