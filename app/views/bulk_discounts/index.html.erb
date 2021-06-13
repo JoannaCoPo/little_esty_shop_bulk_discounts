@@ -7,7 +7,7 @@
 
 <section id="holidays">
   <h4>Upcoming Holidays</h4>
-  <% @public_holiday_service.upcoming_3_holidays.each do |holiday| %>
+  <% PublicHolidayService.new.upcoming_3_holidays.each do |holiday| %>
       <li>
         <%= holiday[:name] %>
       </li>
