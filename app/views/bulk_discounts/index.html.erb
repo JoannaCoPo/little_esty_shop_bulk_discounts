@@ -4,3 +4,12 @@
   <p><b><%= link_to "Discount ID #{discount.id}", merchant_bulk_discount_path(@merchant, discount) %></b></p>
   <p><%= discount.discount %> percent discount with a minimum purchase quantity of <%= discount.min_quantity %></p>
 <% end %>
+
+<section id="holidays">
+  <h4>Upcoming Holidays</h4>
+  <% @public_holiday_service.upcoming_3_holidays.each do |holiday| %>
+      <li>
+        <%= holiday[:name] %>
+      </li>
+  <% end %>
+</section>
