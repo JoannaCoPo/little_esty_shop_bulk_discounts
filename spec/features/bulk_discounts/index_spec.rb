@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'merchant dashboard' do
+RSpec.describe 'bulk discounts index' do
   before :each do
     @merchant_1 = Merchant.create!(name: "Fancy Petz")
     @bulk_discount_1 = @merchant_1.bulk_discounts.create!(discount: 0.20, min_quantity: 15)
@@ -44,19 +44,9 @@ RSpec.describe 'merchant dashboard' do
 
   it 'has a link to create a new discount that redirects to form' do
     within '#new-discount' do
-      save_and_open_page
       expect(page).to have_link('Create New Bulk Discount')
       click_link('Create New Bulk Discount')
       expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant_1))
     end
   end
 end
-
-# As a merchant
-# When I visit my bulk discounts index
-# Then I see a link to create a new discount
-# When I click this link
-# Then I am taken to a new page where I see a form to add a new bulk discount
-# When I fill in the form with valid data
-# Then I am redirected back to the bulk discount index
-# And I see my new bulk discount listed
