@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe 'bulk discounts index' do
   before :each do
     @merchant_1 = Merchant.create!(name: "Fancy Petz")
-    @bulk_discount_1 = @merchant_1.bulk_discounts.create!(discount: 0.20, min_quantity: 15)
-    @bulk_discount_2 = @merchant_1.bulk_discounts.create!(discount: 0.10, min_quantity: 10)
-    @bulk_discount_3 = @merchant_1.bulk_discounts.create!(discount: 0.30, min_quantity: 20)
+    @bulk_discount_1 = @merchant_1.bulk_discounts.create!(discount: 20, min_quantity: 15)
+    @bulk_discount_2 = @merchant_1.bulk_discounts.create!(discount: 10, min_quantity: 10)
+    @bulk_discount_3 = @merchant_1.bulk_discounts.create!(discount: 30, min_quantity: 20)
     # @bulk_discount_3 = FactoryBot.create(:bulk_discount
     # @bulk_discount_1 = @merchant1.bulk_discounts.create!(discount: )
     # @bulk_discount_2 = FactoryBot.create(:bulk_discount, merchant: @merchant_1)
@@ -48,5 +48,30 @@ RSpec.describe 'bulk discounts index' do
       click_link('Create New Bulk Discount')
       expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant_1))
     end
+  end
+
+  it 'has a link to delete the bulk discount' do
+    within("#bulk_discount-#{@bulk_discount_1.id}") do
+      expect(page).to have_button( "Delete Bulk Discount")
+    end
+
+    within("#bulk_discount-#{@bulk_discount_2.id}") do
+      expect(page).to have_button( "Delete Bulk Discount")
+    end
+
+    within("#bulk_discount-#{@bulk_discount_3.id}") do
+      expect(page).to have_button( "Delete Bulk Discount")
+    end
+  end
+
+  it 'link to delete the bulk discount redirects to index where item is no longer listed' do
+    within("#bulk_discount-#{@bulk_discount_1.id}") do
+      save_and_open_page
+      expect(page).to have_button( "Delete Bulk Discount")
+      click_button 'Delete Bulk Discount'
+    end
+
+    expect(page).to_not have_content(@bulk_discount_1.discount)
+    expect(current_path).to eq(merchant_bulk_discounts_path(@merchant_1))
   end
 end
