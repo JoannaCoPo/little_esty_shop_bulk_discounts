@@ -30,4 +30,15 @@ RSpec.describe 'merchant dashboard' do
     click_link("Discount ID #{@bulk_discount_2.id}")
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant_1, @bulk_discount_2))
   end
+
+  it 'has a section that lists the next 3 upcoming holidays via an API' do
+  next_3_holidays = PublicHolidayService.new.upcoming_3_holidays.map{|holiday| holiday[:name]}
+
+    within '#holidays' do
+      expect(page).to have_content('Upcoming Holidays')
+      expect(page).to have_content(next_3_holidays.first)
+      expect(page).to have_content(next_3_holidays.second)
+      expect(page).to have_content(next_3_holidays.third)
+    end
+  end
 end
