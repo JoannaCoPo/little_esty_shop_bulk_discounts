@@ -4,3 +4,5 @@
   Receive <%= @bulk_discount.discount %> % off with the purchase of
           <%= @bulk_discount.min_quantity %> items or more!
 </p>
+
+<%= button_to "Edit Bulk Discount", edit_merchant_bulk_discount(@merchant, @bulk_discount), method: :get %>

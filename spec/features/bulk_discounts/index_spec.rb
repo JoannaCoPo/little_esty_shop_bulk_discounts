@@ -66,7 +66,6 @@ RSpec.describe 'bulk discounts index' do
 
   it 'link to delete the bulk discount redirects to index where item is no longer listed' do
     within("#bulk_discount-#{@bulk_discount_1.id}") do
-      save_and_open_page
       expect(page).to have_button( "Delete Bulk Discount")
       click_button 'Delete Bulk Discount'
     end
