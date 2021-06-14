@@ -1,0 +1,10 @@
+<h3><%= "Bulk Discount Details: ID ##{@bulk_discount.id}" %></h3>
+
+<p>
+  Receive <%= @bulk_discount.discount %> % off with the purchase of
+          <%= @bulk_discount.min_quantity %> items or more!
+</p>
+
+<section id="edit">
+<%= button_to "Edit Bulk Discount", edit_merchant_bulk_discount_path(@merchant, @bulk_discount), method: :get %>
+</section>
