@@ -5,6 +5,9 @@ RSpec.describe 'invoices show' do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Jewelry')
 
+    @bulk_discount_1 = @merchant1.bulk_discounts.create!(discount: 25, min_quantity: 10)
+    # @bulk_discount_2 = @merchant1.bulk_discounts.create!(discount: 80, min_quantity: 11)
+
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
@@ -98,14 +101,26 @@ RSpec.describe 'invoices show' do
 
    it 'shows total discounted revenue' do
      visit merchant_invoice_path(@merchant1, @invoice_1)
-     # save_and_open_page
-    expect(page).to have_content(@invoice_1.total_discounted_revenue)
+
+     expect(page).to have_content(@invoice_1.total_discounted_revenue)
+   end
+
+   it 'shows link applied to discounts if any' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    #item - butterfly clip
+    within("#the-status-#{@ii_11.id}") do
+      expect(page).to have_link("Applied Bulk Discount")
+    end
+
+    within("#the-status-#{@ii_1.id}") do
+      expect(page).to have_content("No discount applied")
+    end
   end
 end
 
-# Merchant Invoice Show Page: Total Revenue and Discounted Revenue
+# Merchant Invoice Show Page: Link to applied discounts
 #
 # As a merchant
 # When I visit my merchant invoice show page
-# Then I see the total revenue for my merchant from this invoice (not including discounts)
-# And I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation
+# Next to each invoice item I see a link to the show page for the bulk discount that was applied (if any)
