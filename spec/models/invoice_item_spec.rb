@@ -13,8 +13,9 @@ RSpec.describe InvoiceItem, type: :model do
     it { should belong_to :item }
   end
 
-  it "determines whether a discount has been applied to an invoice item" do
-    #remove instance variables if time
+  describe "instance methods" do
+    it "determines whether a discount has been applied to an invoice item" do
+      #remove instance variables if time
       @merchant_1 = Merchant.create!(name: 'Fanzy Petz')
 
       @item_1 = Item.create!(name: "Shampoo", description: "This washes dogs hair", unit_price: 6, merchant_id: @merchant_1.id, status: 1)
@@ -33,9 +34,10 @@ RSpec.describe InvoiceItem, type: :model do
       @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 1, unit_price: 2, status: 1)
 
       #increase unit_price for better visual
-      
+
       expect(@invoice_1.total_discounted_revenue).to eq(227.0)
       expect(@ii_1.discount_condition).not_to eq(nil)
       expect(@ii_2.discount_condition).to eq(nil)
     end
   end
+end
