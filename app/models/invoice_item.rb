@@ -15,4 +15,14 @@ class InvoiceItem < ApplicationRecord
     invoice_ids = InvoiceItem.where("status = 0 OR status = 1").pluck(:invoice_id)
     Invoice.order(created_at: :asc).find(invoice_ids)
   end
+
+  def discount_condition
+    bulk_discounts
+    .where('? >= min_quantity', self.quantity)
+    .order(discount: :desc)
+    .pluck(:id)
+    .first
+  end
+
+  #select not working here
 end
