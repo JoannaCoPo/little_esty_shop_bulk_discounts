@@ -94,8 +94,13 @@ RSpec.describe 'invoices show' do
       expect(page).to have_content("cancelled")
       # expect(page).to_not have_content("in progress")
      end
-  end
+   end
 
+   it 'shows total discounted revenue' do
+     visit merchant_invoice_path(@merchant1, @invoice_1)
+     # save_and_open_page
+    expect(page).to have_content(@invoice_1.total_discounted_revenue)
+  end
 end
 
 # Merchant Invoice Show Page: Total Revenue and Discounted Revenue
