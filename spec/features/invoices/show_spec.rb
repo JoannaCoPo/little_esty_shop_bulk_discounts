@@ -5,6 +5,10 @@ RSpec.describe 'invoices show' do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Jewelry')
 
+    @bulk_discount_1 = @merchant1.bulk_discounts.create!(discount: 25, min_quantity: 10)
+    @bulk_discount_2 = @merchant1.bulk_discounts.create!(discount: 80, min_quantity: 11)
+    @bulk_discount_3 = @merchant1.bulk_discounts.create!(discount: 90, min_quantity: 15)
+
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
@@ -94,6 +98,36 @@ RSpec.describe 'invoices show' do
       expect(page).to have_content("cancelled")
       # expect(page).to_not have_content("in progress")
      end
+   end
+
+   it 'shows total discounted revenue' do
+     visit merchant_invoice_path(@merchant1, @invoice_1)
+
+     expect(page).to have_content(@invoice_1.total_discounted_revenue)
+   end
+
+   it 'shows link applied to discounts if any' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    #item - butterfly clip
+    within("#the-status-#{@ii_11.id}") do
+      expect(page).to have_link("Applied Bulk Discount")
+    end
+
+    within("#the-status-#{@ii_1.id}") do
+      expect(page).to have_content("No discount applied")
+    end
   end
 
+  it "clicks discount link and redirects to its show page" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    within("#the-status-#{@ii_11.id}") do
+      expect(page).to have_link("Applied Bulk Discount")
+      click_link("Applied Bulk Discount")
+    end
+
+    #if time add expextation to not have_link for bulk_discount_3 (check quantities first)
+    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bulk_discount_2))
+  end
 end
